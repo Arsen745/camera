@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Page</title>
+</head>
+<body>
+    <h1>Стрим</h1>
+    <video id="stream" width="640" height="480" autoplay></video>
+
+    <script>
+        const video = document.getElementById('stream');
+
+        // Получаем поток из глобальной переменной
+        if (window.videoStream) {
+            video.srcObject = window.videoStream; // Устанавливаем поток в видеоплеер
+        } else {
+            alert('Нет доступного видеопотока.');
+        }
+    </script>
+</body>
+</html>

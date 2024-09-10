@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Введите пароль</h1>
+    <input type="password" id="password" placeholder="Пароль">
+    <button id="loginBtn">Войти</button>
+
+    <script>
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            const password = document.getElementById('password').value;
+
+            if (password === '2024') {
+                // Перенаправление на страницу с камерой
+                window.location.href = 'camera.html';
+            } else if (password === '2025') {
+                // Перенаправление на страницу со стримом
+                window.location.href = 'stream.html';
+            } else {
+                alert('Неправильный пароль. Попробуйте снова.');
+            }
+        });
+    </script>
+</body>
+</html>

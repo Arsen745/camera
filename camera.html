@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Page</title>
+</head>
+<body>
+    <h1>Камера</h1>
+    <video id="video" width="640" height="480" autoplay></video>
+    <button id="startStreamBtn">Перейти к стриму</button>
+
+    <script>
+        const video = document.getElementById('video');
+        let mediaStream;
+
+        // Запрашиваем доступ к камере
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                mediaStream = stream;
+                video.srcObject = stream;
+            })
+            .catch(function(err) {
+                console.log("Ошибка доступа к камере: " + err);
+            });
+
+        // Переходим на страницу стрима
+        document.getElementById('startStreamBtn').addEventListener('click', function() {
+            if (mediaStream) {
+                // Передаем поток в новую вкладку
+                const newWindow = window.open('stream.html');
+                newWindow.onload = function() {
+                    newWindow.videoStream = mediaStream; // Передаем поток
+                };
+            }
+        });
+    </script>
+</body>
+</html>
