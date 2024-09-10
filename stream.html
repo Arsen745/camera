@@ -7,39 +7,19 @@
 </head>
 <body>
     <h1>Стрим</h1>
-    <video id="stream" width="640" height="480" autoplay></video>
+    <img id="photo" width="640" height="480" alt="Снимок камеры" />
 
     <script>
-        const video = document.getElementById('stream');
-        const peerConnection = new RTCPeerConnection();
+        const photo = document.getElementById('photo');
 
-        // Здесь вам нужно будет получить ICE candidates и сигналы от camera.html
-        // Например, с помощью WebSocket или другого метода
-        // Для примера, просто имитируем получение offer
+        // Получаем снимок из localStorage
+        const photoData = localStorage.getItem('photo');
 
-        // Вставьте здесь свой собственный способ получения offer
-        const receivedOffer = /* полученный offer от camera.html */;
-
-        peerConnection.setRemoteDescription(new RTCSessionDescription(receivedOffer))
-            .then(() => {
-                // Создаем ответ
-                return peerConnection.createAnswer();
-            })
-            .then(answer => {
-                return peerConnection.setLocalDescription(answer);
-            })
-            .then(() => {
-                console.log("Answer sent: ", peerConnection.localDescription);
-                // Отправьте ответ обратно на camera.html
-            })
-            .catch(err => {
-                console.error(err);
-            });
-
-        // Получение медиа потока
-        peerConnection.ontrack = (event) => {
-            video.srcObject = event.streams[0];
-        };
+        if (photoData) {
+            photo.src = photoData; // Устанавливаем изображение в тег img
+        } else {
+            photo.alt = 'Нет доступного снимка.';
+        }
     </script>
 </body>
 </html>

@@ -8,44 +8,34 @@
 <body>
     <h1>Камера</h1>
     <video id="video" width="640" height="480" autoplay></video>
-    <button id="startStreamBtn">Начать стрим</button>
+    <button id="takePhotoBtn">Сделать снимок</button>
 
     <script>
         const video = document.getElementById('video');
-        let mediaStream;
+        const takePhotoBtn = document.getElementById('takePhotoBtn');
 
         // Запрашиваем доступ к камере
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(function(stream) {
-                mediaStream = stream;
                 video.srcObject = stream;
             })
             .catch(function(err) {
                 console.log("Ошибка доступа к камере: " + err);
             });
 
-        // Начинаем стрим
-        document.getElementById('startStreamBtn').addEventListener('click', function() {
-            const peerConnection = new RTCPeerConnection();
+        // Сделать снимок и сохранить в localStorage
+        takePhotoBtn.addEventListener('click', function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
 
-            // Добавляем трек к соединению
-            mediaStream.getTracks().forEach(track => {
-                peerConnection.addTrack(track, mediaStream);
-            });
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            // Создаем предложение
-            peerConnection.createOffer()
-                .then(offer => {
-                    return peerConnection.setLocalDescription(offer);
-                })
-                .then(() => {
-                    // Отправляем предложение на сервер (в этом примере просто выводим в консоль)
-                    console.log("Offer sent: ", peerConnection.localDescription);
-                    alert("Стрим запущен. Откройте stream.html для просмотра.");
-                })
-                .catch(err => {
-                    console.error(err);
-                });
+            // Сохраняем изображение в localStorage
+            const photoData = canvas.toDataURL('image/png');
+            localStorage.setItem('photo', photoData);
+            alert('Снимок сохранен!');
         });
     </script>
 </body>
