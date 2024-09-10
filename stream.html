@@ -8,18 +8,27 @@
 <body>
     <h1>Стрим</h1>
     <img id="photo" width="640" height="480" alt="Снимок камеры" />
+    <button id="refreshBtn">Обновить снимокч</button>
 
     <script>
         const photo = document.getElementById('photo');
+        const refreshBtn = document.getElementById('refreshBtn');
 
-        // Получаем снимок из localStorage
-        const photoData = localStorage.getItem('photo');
-
-        if (photoData) {
-            photo.src = photoData; // Устанавливаем изображение в тег img
-        } else {
-            photo.alt = 'Нет доступного снимка.';
+        // Функция для загрузки снимка из localStorage
+        function loadPhoto() {
+            const photoData = localStorage.getItem('photo');
+            if (photoData) {
+                photo.src = photoData; // Устанавливаем изображение в тег img
+            } else {
+                photo.alt = 'Нет доступного снимка.';
+            }
         }
+
+        // Загружаем снимок при загрузке страницы
+        loadPhoto();
+
+        // Обновляем снимок при нажатии кнопки
+        refreshBtn.addEventListener('click', loadPhoto);
     </script>
 </body>
 </html>
