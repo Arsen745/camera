@@ -8,7 +8,7 @@
 <body>
     <h1>Камера</h1>
     <video id="video" width="640" height="480" autoplay></video>
-    <button id="startStreamBtn">Перейти к стриму</button>
+    <button id="startStreamBtn">Начать стрим</button>
 
     <script>
         const video = document.getElementById('video');
@@ -24,15 +24,28 @@
                 console.log("Ошибка доступа к камере: " + err);
             });
 
-        // Переходим на страницу стрима
+        // Начинаем стрим
         document.getElementById('startStreamBtn').addEventListener('click', function() {
-            if (mediaStream) {
-                // Передаем поток в новую вкладку
-                const newWindow = window.open('stream.html');
-                newWindow.onload = function() {
-                    newWindow.videoStream = mediaStream; // Передаем поток
-                };
-            }
+            const peerConnection = new RTCPeerConnection();
+
+            // Добавляем трек к соединению
+            mediaStream.getTracks().forEach(track => {
+                peerConnection.addTrack(track, mediaStream);
+            });
+
+            // Создаем предложение
+            peerConnection.createOffer()
+                .then(offer => {
+                    return peerConnection.setLocalDescription(offer);
+                })
+                .then(() => {
+                    // Отправляем предложение на сервер (в этом примере просто выводим в консоль)
+                    console.log("Offer sent: ", peerConnection.localDescription);
+                    alert("Стрим запущен. Откройте stream.html для просмотра.");
+                })
+                .catch(err => {
+                    console.error(err);
+                });
         });
     </script>
 </body>
